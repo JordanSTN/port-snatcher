@@ -1,0 +1,42 @@
+import socket
+import datetime
+
+try:
+    domain_trgt = input("Enter a host to scan: ")
+    tgt_p = socket.gethostbyname(domain_trgt)
+    # dns_rtrn = socket.gethostbyaddr(tgt_p)
+    # print(dns_rtrn)
+except socket.gaierror:
+    print("We don't know that location\n\n So we'll just scan you!!\n\n")
+    tgt_p = "127.0.0.1"
+
+txt_fl = open("ZZZ.txt", 'w')
+txt_fl.write("Scanner at your service!!\n")
+
+x = 1
+y = 1026
+
+log = datetime.datetime.now()
+print("Starting time: {}\n".format(log))
+txt_fl.write("Starting time: {}\n".format(log))
+
+for port_value in range(x, y):
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(0.1)
+    cn_rs = s.connect_ex((tgt_p, port_value))
+    # print(domain_trgt + ":" + str(prt_vl))
+    if cn_rs == 0:
+        print("port {} - code {}".format(port_value, cn_rs))
+        txt_fl.write(tgt_p + ":" + str(port_value) + "\n")
+    else:
+        print("port {} is closed - Code {}".format(port_value, cn_rs))
+
+te = datetime.datetime.now()
+dt = te - log
+
+print("Starting time:{}\nEnding Time:{}\nTotal time:{}".format(log, te, dt))
+txt_fl.write("Starting Time:{}\nEnding Time:{}\nTotal time:{}".format(log, te, dt))
+
+txt_fl.close()
+
